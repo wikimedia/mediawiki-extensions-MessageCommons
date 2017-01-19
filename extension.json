@@ -1,0 +1,30 @@
+{
+	"name": "MessageCommons",
+	"version": "1.9.1",
+	"author": [
+		"Daniel Friesen",
+		"Nathaniel Herman",
+		"Jack Phoenix"
+	],
+	"license-name": "GPL-2.0+",
+	"url": "https://www.mediawiki.org/wiki/Extension:MessageCommons",
+	"description": "Allows MediaWiki messages to be shared from a central database",
+	"type": "other",
+	"config": {
+		"MessageCommonsDatabase": "mwmsgwiki",
+		"MessageCommonsLang": "en",
+		"MessageCommonsIsCommons": false
+	},
+	"AutoloadClasses": {
+		"MessageCommons": "MessageCommons.class.php"
+	},
+	"Hooks": {
+		"MessagesPreLoad": [
+			"MessageCommons::onMessagesPreLoad"
+		],
+		"EditPage::showEditForm:initial": [
+			"MessageCommons::onEditPage"
+		]
+	},
+	"manifest_version": 1
+}
