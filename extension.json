@@ -8,8 +8,13 @@
 	],
 	"license-name": "GPL-2.0+",
 	"url": "https://www.mediawiki.org/wiki/Extension:MessageCommons",
-	"description": "Allows MediaWiki messages to be shared from a central database",
+	"descriptionmsg": "messagecommons-desc",
 	"type": "other",
+	"MessagesDirs": {
+		"MessageCommons": [
+			"i18n"
+		]
+	},
 	"config": {
 		"MessageCommonsDatabase": "mwmsgwiki",
 		"MessageCommonsLang": "en",
