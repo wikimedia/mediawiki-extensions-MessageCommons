@@ -73,7 +73,7 @@ class MessageCommons {
 	public static function getMsg( $msg ) {
 		global $wgMessageCommonsDatabase;
 		$title = Title::makeTitle( NS_MEDIAWIKI, $msg );
-		$dbr = wfGetDB( DB_SLAVE, array(), $wgMessageCommonsDatabase );
+		$dbr = wfGetDB( DB_REPLICA, array(), $wgMessageCommonsDatabase );
 		$row = $dbr->selectRow(
 			array( 'page', 'revision', 'text' ),
 			array( '*' ),
