@@ -140,4 +140,16 @@ class MessageCommons {
 
 		return true;
 	}
+
+	/**
+	 * Extension registration callback
+	 */
+	public static function onRegistration() {
+		global $wgWikimediaJenkinsCI, $wgMessageCommonsDatabase, $wgDBname;
+
+		// Override $wgMessageCommonsDatabase for Wikimedia Jenkins.
+		if ( isset( $wgWikimediaJenkinsCI ) && $wgWikimediaJenkinsCI ) {
+			$wgMessageCommonsDatabase = $wgDBname;
+		}
+	}
 }

@@ -15,6 +15,7 @@
 			"i18n"
 		]
 	},
+	"callback": "MessageCommons::onRegistration",
 	"config": {
 		"MessageCommonsDatabase": "mwmsgwiki",
 		"MessageCommonsLang": "en",
