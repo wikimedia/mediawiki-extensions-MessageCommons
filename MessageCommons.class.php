@@ -97,7 +97,7 @@ class MessageCommons {
 	 * @return bool
 	 */
 	public static function onEditPage( &$editPage ) {
-		global $wgLang, $wgContLang;
+		global $wgLang;
 		global $wgMessageCommonsIsCommons, $wgMessageCommonsLang;
 
 		// don't initialize for MessageCommons wiki
@@ -121,12 +121,13 @@ class MessageCommons {
 		if ( !$title->exists() ) {
 			$page = $title->getDBkey();
 			if ( strpos( $title->getDBkey(), '/' ) === false ) {
+				$contLang = MediaWiki\MediaWikiServices::getInstance()->getContentLanguage();
 				// if $wgLang is the same language as MessageCommons, check the
-				// global msg before checking if $wgContLang has a message on the wiki
+				// global msg before checking if $contLang has a message on the wiki
 				if ( $wgLang->getCode() == $wgMessageCommonsLang ) {
 					$page = sprintf( '%s/%s', $title->getDBkey(), $wgLang->getCode() );
 				}
-				$page = sprintf( '%s/%s', $title->getDBkey(), $wgContLang->getCode() );
+				$page = sprintf( '%s/%s', $title->getDBkey(), $contLang->getCode() );
 			}
 
 			// fetch text from MessageCommons wiki
