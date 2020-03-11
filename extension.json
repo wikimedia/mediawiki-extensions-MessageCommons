@@ -25,12 +25,8 @@
 		"MessageCommons": "MessageCommons.class.php"
 	},
 	"Hooks": {
-		"MessagesPreLoad": [
-			"MessageCommons::onMessagesPreLoad"
-		],
-		"EditPage::showEditForm:initial": [
-			"MessageCommons::onEditPage"
-		]
+		"MessagesPreLoad": "MessageCommons::onMessagesPreLoad",
+		"EditPage::showEditForm:initial": "MessageCommons::onEditPage"
 	},
 	"manifest_version": 1
 }
