@@ -7,7 +7,7 @@
  * @author Daniel Friesen <dan_the_man@telus.net>
  * @author Nathaniel Herman <pinky@shoutwiki.com>
  * @author Jack Phoenix <jack@shoutwiki.com>
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
+ * @license GPL-2.0-or-later
  * @note Some techniques borrowed from Wikia's SharedMessages system
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,12 @@
 
 class MessageCommons {
 
+	/**
+	 * @param string $title
+	 * @param string &$message
+	 * @param string $code
+	 * @return bool
+	 */
 	public static function onMessagesPreLoad( $title, &$message, $code ) {
 		global $wgLanguageCode, $wgMessageCommonsIsCommons, $wgMessageCommonsLang;
 
@@ -46,7 +52,8 @@ class MessageCommons {
 			}
 			$msgNames[] = sprintf( '%s/%s', $msgName, $wgLanguageCode );
 		}
-		$msgNames[] = $msgName; // do this last
+		// do this last
+		$msgNames[] = $msgName;
 		$msgNames = array_unique( $msgNames );
 
 		foreach ( $msgNames as $msgName ) {
@@ -73,16 +80,16 @@ class MessageCommons {
 	public static function getMsg( $msg ) {
 		global $wgMessageCommonsDatabase;
 		$title = Title::makeTitle( NS_MEDIAWIKI, $msg );
-		$dbr = wfGetDB( DB_REPLICA, array(), $wgMessageCommonsDatabase );
+		$dbr = wfGetDB( DB_REPLICA, [], $wgMessageCommonsDatabase );
 		$row = $dbr->selectRow(
-			array( 'page', 'revision', 'text' ),
-			array( '*' ),
-			array(
+			[ 'page', 'revision', 'text' ],
+			[ '*' ],
+			[
 				'page_namespace' => $title->getNamespace(),
 				'page_title' => $title->getDBkey(),
 				'page_latest = rev_id',
 				'old_id = rev_text_id'
-			)
+			]
 		);
 		if ( !$row ) {
 			return null;
@@ -93,7 +100,7 @@ class MessageCommons {
 	/**
 	 * Preload the shared MediaWiki: message text to the edit area
 	 *
-	 * @param EditPage $editPage
+	 * @param EditPage &$editPage
 	 * @return bool
 	 */
 	public static function onEditPage( &$editPage ) {

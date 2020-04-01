@@ -22,7 +22,7 @@
 		"MessageCommonsIsCommons": false
 	},
 	"AutoloadClasses": {
-		"MessageCommons": "MessageCommons.class.php"
+		"MessageCommons": "src/MessageCommons.php"
 	},
 	"Hooks": {
 		"MessagesPreLoad": "MessageCommons::onMessagesPreLoad",
