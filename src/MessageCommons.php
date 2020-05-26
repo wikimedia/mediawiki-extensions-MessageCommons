@@ -25,6 +25,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\SlotRecord;
+
 class MessageCommons {
 
 	/**
@@ -75,26 +78,34 @@ class MessageCommons {
 	 * Fetches a MediaWiki message from $wgMessageCommonsDatabase DB
 	 *
 	 * @param string $msg Name of a MediaWiki: message that we want to fetch
-	 * @return string
+	 * @return string|false Text the text requested or false on failure
 	 */
 	public static function getMsg( $msg ) {
 		global $wgMessageCommonsDatabase;
+
 		$title = Title::makeTitle( NS_MEDIAWIKI, $msg );
 		$dbr = wfGetDB( DB_REPLICA, [], $wgMessageCommonsDatabase );
 		$row = $dbr->selectRow(
-			[ 'page', 'revision', 'text' ],
+			[ 'page', 'revision', 'text', 'slots', 'content' ],
 			[ '*' ],
 			[
 				'page_namespace' => $title->getNamespace(),
 				'page_title' => $title->getDBkey(),
 				'page_latest = rev_id',
-				'old_id = rev_text_id'
-			]
+				'page_latest = slot_revision_id',
+				'old_id = slot_content_id'
+			],
+			__METHOD__
 		);
+
 		if ( !$row ) {
 			return null;
 		}
-		return Revision::getRevisionText( $row );
+
+		$revisionStore = MediaWikiServices::getInstance()->getRevisionStoreFactory()->getRevisionStore( $wgMessageCommonsDatabase );
+		$rev = $revisionStore->getRevisionByTitle( $title );
+		$content = $revisionStore->getSlot( SlotRecord::MAIN )->getContent();
+		return $content instanceof TextContent ? $content->getText() : false;
 	}
 
 	/**
@@ -128,7 +139,7 @@ class MessageCommons {
 		if ( !$title->exists() ) {
 			$page = $title->getDBkey();
 			if ( strpos( $title->getDBkey(), '/' ) === false ) {
-				$contLang = MediaWiki\MediaWikiServices::getInstance()->getContentLanguage();
+				$contLang = MediaWikiServices::getInstance()->getContentLanguage();
 				// if $wgLang is the same language as MessageCommons, check the
 				// global msg before checking if $contLang has a message on the wiki
 				if ( $wgLang->getCode() == $wgMessageCommonsLang ) {
