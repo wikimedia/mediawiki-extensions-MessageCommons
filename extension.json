@@ -10,6 +10,9 @@
 	"url": "https://www.mediawiki.org/wiki/Extension:MessageCommons",
 	"descriptionmsg": "messagecommons-desc",
 	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.34.0"
+	},
 	"MessagesDirs": {
 		"MessageCommons": [
 			"i18n"
