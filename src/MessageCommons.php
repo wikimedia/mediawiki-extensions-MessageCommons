@@ -164,10 +164,10 @@ class MessageCommons {
 	 * Extension registration callback
 	 */
 	public static function onRegistration() {
-		global $wgWikimediaJenkinsCI, $wgMessageCommonsDatabase, $wgDBname;
+		global $wgMessageCommonsDatabase, $wgDBname;
 
 		// Override $wgMessageCommonsDatabase for Wikimedia Jenkins.
-		if ( isset( $wgWikimediaJenkinsCI ) && $wgWikimediaJenkinsCI ) {
+		if ( defined( 'MW_QUIBBLE_CI' ) ) {
 			$wgMessageCommonsDatabase = $wgDBname;
 		}
 	}
