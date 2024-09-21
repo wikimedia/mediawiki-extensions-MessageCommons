@@ -84,7 +84,7 @@ class MessageCommons {
 		global $wgMessageCommonsDatabase;
 
 		$title = Title::makeTitle( NS_MEDIAWIKI, $msg );
-		$dbr = wfGetDB( DB_REPLICA, [], $wgMessageCommonsDatabase );
+		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA, [], $wgMessageCommonsDatabase );
 		$row = $dbr->selectRow(
 			[ 'page', 'revision', 'text', 'slots', 'content' ],
 			[ '*' ],
