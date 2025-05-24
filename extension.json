@@ -1,6 +1,6 @@
 {
 	"name": "MessageCommons",
-	"version": "2.0",
+	"version": "2.1",
 	"author": [
 		"Daniel Friesen",
 		"Nathaniel Herman",
@@ -11,7 +11,7 @@
 	"descriptionmsg": "messagecommons-desc",
 	"type": "other",
 	"requires": {
-		"MediaWiki": ">= 1.34.0"
+		"MediaWiki": ">= 1.43.0"
 	},
 	"MessagesDirs": {
 		"MessageCommons": [
@@ -20,9 +20,18 @@
 	},
 	"callback": "MessageCommons::onRegistration",
 	"config": {
-		"MessageCommonsDatabase": "mwmsgwiki",
-		"MessageCommonsLang": "en",
-		"MessageCommonsIsCommons": false
+		"MessageCommonsDatabase": {
+			"description": "Database name of the MessageCommons database.",
+			"value": "mwmsgwiki"
+		},
+		"MessageCommonsLang": {
+			"description": "ISO-639 language code of the MessageCommons wiki.",
+			"value": "en"
+		},
+		"MessageCommonsIsCommons": {
+			"description": "Are we running on the MessageCommons wiki? Setting this to true causes the extension's main functionality to *not* work, which _is_ required on the MessageCommons wiki to be able to edit the messages properly!",
+			"value": false
+		}
 	},
 	"AutoloadClasses": {
 		"MessageCommons": "src/MessageCommons.php"
@@ -31,5 +40,5 @@
 		"MessagesPreLoad": "MessageCommons::onMessagesPreLoad",
 		"EditPage::showEditForm:initial": "MessageCommons::onEditPage"
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }

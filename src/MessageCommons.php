@@ -25,8 +25,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+use MediaWiki\Content\TextContent;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Title\Title;
 
 class MessageCommons {
 
@@ -84,7 +86,8 @@ class MessageCommons {
 		global $wgMessageCommonsDatabase;
 
 		$title = Title::makeTitle( NS_MEDIAWIKI, $msg );
-		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA, [], $wgMessageCommonsDatabase );
+		$services = MediaWikiServices::getInstance();
+		$dbr = $services->getDBLoadBalancer()->getConnection( DB_REPLICA, [], $wgMessageCommonsDatabase );
 		$row = $dbr->selectRow(
 			[ 'page', 'revision', 'text', 'slots', 'content' ],
 			[ '*' ],
@@ -102,7 +105,7 @@ class MessageCommons {
 			return null;
 		}
 
-		$revisionStore = MediaWikiServices::getInstance()->getRevisionStoreFactory()->getRevisionStore( $wgMessageCommonsDatabase );
+		$revisionStore = $services->getRevisionStoreFactory()->getRevisionStore( $wgMessageCommonsDatabase );
 		$rev = $revisionStore->getRevisionByTitle( $title );
 		$content = $rev->getSlot( SlotRecord::MAIN )->getContent();
 		return $content instanceof TextContent ? $content->getText() : false;
@@ -111,7 +114,7 @@ class MessageCommons {
 	/**
 	 * Preload the shared MediaWiki: message text to the edit area
 	 *
-	 * @param EditPage &$editPage
+	 * @param MediaWiki\EditPage\EditPage &$editPage
 	 * @return bool
 	 */
 	public static function onEditPage( &$editPage ) {
