@@ -104,6 +104,9 @@ class MessageCommons {
 
 		$revisionStore = MediaWikiServices::getInstance()->getRevisionStoreFactory()->getRevisionStore( $wgMessageCommonsDatabase );
 		$rev = $revisionStore->getRevisionByTitle( $title );
+		if ( !$rev ) {
+			return null;
+		}
 		$content = $rev->getSlot( SlotRecord::MAIN )->getContent();
 		return $content instanceof TextContent ? $content->getText() : false;
 	}
