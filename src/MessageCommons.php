@@ -86,30 +86,12 @@ class MessageCommons {
 		global $wgMessageCommonsDatabase;
 
 		$title = Title::makeTitle( NS_MEDIAWIKI, $msg );
-		$services = MediaWikiServices::getInstance();
-		$dbr = $services->getDBLoadBalancer()->getConnection( DB_REPLICA, [], $wgMessageCommonsDatabase );
-		$row = $dbr->selectRow(
-			[ 'page', 'revision', 'text', 'slots', 'content' ],
-			[ '*' ],
-			[
-				'page_namespace' => $title->getNamespace(),
-				'page_title' => $title->getDBkey(),
-				'page_latest = rev_id',
-				'page_latest = slot_revision_id',
-				'old_id = slot_content_id'
-			],
-			__METHOD__
-		);
-
-		if ( !$row ) {
-			return null;
-		}
-
-		$revisionStore = $services->getRevisionStoreFactory()->getRevisionStore( $wgMessageCommonsDatabase );
+		$revisionStore = MediaWikiServices::getInstance()->getRevisionStoreFactory()->getRevisionStore( $wgMessageCommonsDatabase );
 		$rev = $revisionStore->getRevisionByTitle( $title );
 		if ( !$rev ) {
 			return null;
 		}
+
 		$content = $rev->getSlot( SlotRecord::MAIN )->getContent();
 		return $content instanceof TextContent ? $content->getText() : false;
 	}
